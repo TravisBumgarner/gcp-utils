@@ -2,6 +2,7 @@ import base64
 import os
 import http.client
 import urllib
+import json
 
 from dotenv import load_dotenv
 
@@ -28,8 +29,12 @@ def gcp_billing_alert(event, context):
          event (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
     """
-    pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    send(pubsub_message)
-    print(pubsub_message)
-
+    try:
+        pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+        loaded_json = json.loads(pubsub_message)
+        percent_of_budget = float(loaded_json['costAmount']) / float(loaded_json['budgetAmount'])
+        if percent_of_budget > 0.8:
+            send(f'Almost time to panic {percent_of_budget}')
+    except:
+        send('pubsub billing failure on GCP PANIC!')
     
