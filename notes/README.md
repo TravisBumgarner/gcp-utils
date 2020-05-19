@@ -25,6 +25,8 @@ All DNS goes here.
 
 1. Setup `Dockerfile`
 2. Add deploy command to npm: `"deploy": "gcloud builds submit --tag gcr.io/[project]/[dir] && gcloud run deploy frontend --image gcr.io/[project]/[dir] --platform managed --region us-east1"`
+3. Create Bucket
+4. Point Webppack at bucket
 
 # Django 
 
